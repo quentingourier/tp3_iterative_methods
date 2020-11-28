@@ -151,7 +151,7 @@ print(MIRelaxation ( A , b , w , x0 , epsilon , Nitermax))
 
 
 # Partie 2 Expérimentation des méthodes
-'''
+
 # question 1
 A = np.zeros((100,100))
 b = np.zeros((100, 1))
@@ -195,11 +195,15 @@ pp.show()
 A = np.zeros((100,100))
 b = np.zeros((100,1))
 for i in range (0,100):
-    b[i,0] = cos((i+1)/8)
     for j in range (0,100):
-        A[i,j] = 1/(1+3*abs((i+1)-(j+1)))
+        if i == j:
+            A[i, j] = 3
+            b[i,0] = cos((i+1)/8)
+        else:
+            A[i,j] = 1/(1+3*abs((i+1)-(j+1)))
+verif_conv(A)
 x0 = np.zeros((100,1))
-liste_epsilon = np.linspace(10**-13, 0.1, 130)
+liste_epsilon = [10**-1, 10**-2, 10**-3, 10**-4, 10**-5, 10**-6, 10**-7, 10**-8, 10**-9, 10**-10, 10**-11, 10**-12, 10**-13]
 Nitermax = 100
 liste_nb_iteration_J = []
 liste_nb_iteration_GS = []
@@ -210,7 +214,7 @@ for i in range (0, len (liste_epsilon)):
     liste_nb_iteration_GS.append(nbiter)
 pp.plot(liste_epsilon,liste_nb_iteration_J,label = 'Méthode Jacobi')
 pp.plot(liste_epsilon,liste_nb_iteration_GS,label ='Méthode de Gauss-Seidel')
-pp.xlim(0.000000001 ,0.1)
+pp.xlim(10**-13 ,0.1)
 pp.xscale('log')
 pp.xlabel('précision souhaitée')
 pp.ylabel("nombre d'itérations nécessaires")
@@ -218,6 +222,7 @@ pp.title("Nombre d'itération nécessaires pour plusieurs précisions souhaitée
 pp.legend()
 pp.show()
 
+'''
 #question 3
 n= 100
 A = np.zeros((n,n)) #SYSTEME 1
