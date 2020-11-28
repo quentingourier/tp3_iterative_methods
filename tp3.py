@@ -15,10 +15,11 @@ def genererA(n):
 
 def MIGenerale ( M , N , b , x0 , epsilon , Nitermax ):
     erreur = 1
+    x = x0
     compteur = 0
     A = M - N
     while erreur > epsilon and compteur < Nitermax :
-        x_new = np.dot(np.linalg.inv(M), np.dot(N,x0)) + np.dot(np.linalg.inv(M), b )
+        x_new = np.dot(np.linalg.inv(M), np.dot(N,x)) + np.dot(np.linalg.inv(M), b )
         erreur = np.linalg.norm(np.dot(A, x_new)-b)
         x = x_new
         compteur += 1
@@ -27,11 +28,17 @@ def MIGenerale ( M , N , b , x0 , epsilon , Nitermax ):
 def MIJacobi ( A , b , x0 , epsilon , Nitermax):
     M = np.diag(np.diag(A))
     N = M - A
+    print("\nDécomposition de Jacobi\n")
+    print("M =\n", M)
+    print("N =\n", N)
     return MIGenerale(M, N, b, x0, epsilon, Nitermax)
 
 def MIGaussSeidel ( A , b , x0 , epsilon , Nitermax):
     M = np.tril(A)
     N = M - A
+    print("\nDécomposition de Gauss-Seidel\n")
+    print("M =\n", M)
+    print("N =\n", N)
     return MIGenerale(M, N, b, x0, epsilon, Nitermax)
 
 def decompo_Relaxation(A, w):
@@ -117,22 +124,22 @@ def courbe_temps_w(liste_w, liste_tps):
 #-----------PROGRAMME---------------------------------------------------
 #----------------------------------------------------------------------------
     
-'''
+
 #question 1
 #voir la def
 
-#question 2
+
 A = np.array([[10, 1], [-1, 10]])
 b = np.array([1, 2])
 x0 = np.zeros(b.shape)
 epsilon = 10**-5
 Nitermax = 1000
-#MIJacobi ( A , b , x0 , epsilon , Nitermax)
+
+print("\nx = ", MIJacobi ( A , b , x0 , epsilon , Nitermax))
+print("\nx = ", MIGaussSeidel ( A , b , x0 , epsilon , Nitermax))
 
 
-#question 3
-MIGaussSeidel ( A , b , x0 , epsilon , Nitermax)
-
+'''
 #question 4
 w = 1.5
 print(MIRelaxation ( A , b , w , x0 , epsilon , Nitermax))
