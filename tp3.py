@@ -55,6 +55,9 @@ def MIRelaxation (A , b , w , x0 , epsilon , Nitermax):
     F = D - E - A
     M = (1/w)*D - E
     N = ((1/w)-1)*D + F #M-A
+    print("\nDécomposition de la relaxation\n")
+    print("M =\n", M)
+    print("N =\n", N)
     return MIGenerale(M, N, b, x0, epsilon, Nitermax)
 
 def converge(M, N):
@@ -63,20 +66,21 @@ def converge(M, N):
     ray_spec = max(np.absolute(vp)) #faire attention à ça pour les complexes 
     return ray_spec
 
-def verif_conv():
+def verif_conv(A):
     #initialisation
     '''A = genererA(3)'''
-    A = np.array([[1, 2, -2], [1, 1, 1], [2, 2, 1]])
     print("\nA=\n", A)
     #par jacobi
-    M, N = jacobi_MN(A)
+    M = np.diag(np.diag(A))
+    N = M - A
     ray_spec = converge(M, N)
     print("\np(J) = ", ray_spec)
     #par gauss-seidel
-    M, N = gs_MN(A)
+    M = np.tril(A)
+    N = M - A
     ray_spec = converge(M, N)
     print("\np(G) = ", ray_spec)
-    print("\nAu vu des valeurs de rayon spectral, on en déduit quelle(s) méthode(s) converge(nt)")
+
     
 def w_etude(n):
     A = np.array([[1, 2, -2], [1, 1, 1], [2, 2, 1]])
@@ -128,25 +132,26 @@ def courbe_temps_w(liste_w, liste_tps):
 #question 1
 #voir la def
 
-
+'''
 A = np.array([[10, 1], [-1, 10]])
 b = np.array([1, 2])
 x0 = np.zeros(b.shape)
+w = 1.5
 epsilon = 10**-5
 Nitermax = 1000
 
 print("\nx = ", MIJacobi ( A , b , x0 , epsilon , Nitermax))
-print("\nx = ", MIGaussSeidel ( A , b , x0 , epsilon , Nitermax))
+print("\nx = ", MIGaussSeidel ( A , b , x0 , epsilon , Nitermax), "\n")
+print("\nx = ", MIRelaxation ( A , b, w, x0 , epsilon , Nitermax), "\n")
 
 
-'''
 #question 4
 w = 1.5
 print(MIRelaxation ( A , b , w , x0 , epsilon , Nitermax))
 
 
 # Partie 2 Expérimentation des méthodes
-
+'''
 # question 1
 A = np.zeros((100,100))
 b = np.zeros((100, 1))
@@ -157,7 +162,8 @@ for i in range (0,100):
             b[i,0] = cos((i+1)/8)
         else:
             A[i,j] = 1/(12+(3*(i+1)-5*(j+1))**2)
-            
+
+verif_conv(A)   
 b = np.asarray(b).reshape(-1)#remettre b sous forme de vecteur
 x0 = np.zeros(b.shape)
 Nitermax = 100
@@ -184,7 +190,7 @@ pp.title("Nombre d'itération nécessaires pour plusieurs précisions souhaitée
 pp.legend()
 pp.show()
 
-
+'''
 # question 2 
 A = np.zeros((100,100))
 b = np.zeros((100,1))
@@ -193,7 +199,7 @@ for i in range (0,100):
     for j in range (0,100):
         A[i,j] = 1/(1+3*abs((i+1)-(j+1)))
 x0 = np.zeros((100,1))
-liste_epsilon = [0.1 , 0.01 , 0.001 , 0.0001 , 0.00001 , 0.000001 , 0.0000001 ,  0.000000001 ]
+liste_epsilon = np.linspace(10**-13, 0.1, 130)
 Nitermax = 100
 liste_nb_iteration_J = []
 liste_nb_iteration_GS = []
@@ -211,7 +217,6 @@ pp.ylabel("nombre d'itérations nécessaires")
 pp.title("Nombre d'itération nécessaires pour plusieurs précisions souhaitées")
 pp.legend()
 pp.show()
-
 
 #question 3
 n= 100
