@@ -14,6 +14,7 @@ def genererA(n):
     return A
 
 def MIGenerale ( M , N , b , x0 , epsilon , Nitermax ):
+    erreur = 1
     compteur = 0
     A = M - N
     while erreur > epsilon and compteur < Nitermax :
