@@ -14,12 +14,10 @@ def genererA(n):
     return A
 
 def MIGenerale ( M , N , b , x0 , epsilon , Nitermax ):
-    erreur = 1
     compteur = 0
-    x = x0
     A = M - N
     while erreur > epsilon and compteur < Nitermax :
-        x_new = np.dot(np.linalg.inv(M), np.dot(N,x)) + np.dot(np.linalg.inv(M), b )
+        x_new = np.dot(np.linalg.inv(M), np.dot(N,x0)) + np.dot(np.linalg.inv(M), b )
         erreur = np.linalg.norm(np.dot(A, x_new)-b)
         x = x_new
         compteur += 1
