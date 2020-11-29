@@ -138,6 +138,7 @@ print("\nx = ", MIRelaxation ( A , b, w, x0 , epsilon , Nitermax), "\n")
 w = 1.5
 print(MIRelaxation ( A , b , w , x0 , epsilon , Nitermax))
 
+'''
 
 # Partie 2 Expérimentation des méthodes
 
@@ -151,7 +152,6 @@ for i in range (0,100):
             b[i,0] = cos((i+1)/8)
         else:
             A[i,j] = 1/(12+(3*(i+1)-5*(j+1))**2)
-
 verif_conv(A)   
 b = np.asarray(b).reshape(-1)#remettre b sous forme de vecteur
 x0 = np.zeros(b.shape)
@@ -159,7 +159,6 @@ Nitermax = 100
 liste_epsilon = [10**-4, 10**-5, 10**-6, 10**-7, 10**-8, 10**-9, 10**-10, 10**-11, 10**-12, 10**-13, 10**-14, 10**-15, 10**-16]
 liste_nb_iteration_J = []
 liste_nb_iteration_GS = []
-
 for i in range(len (liste_epsilon)):
     x, nbiter, err = MIJacobi(A, b, x0, liste_epsilon[i], Nitermax)
     liste_nb_iteration_J.append(nbiter)
@@ -167,7 +166,6 @@ for i in range(len (liste_epsilon)):
     liste_nb_iteration_GS.append(nbiter)
 print(liste_nb_iteration_J)
 print(liste_nb_iteration_GS)
-
 pp.gca().invert_xaxis()
 pp.plot(liste_epsilon, liste_nb_iteration_J, label = 'Méthode Jacobi')
 pp.plot(liste_epsilon,liste_nb_iteration_GS, label ='Méthode de Gauss-Seidel')
