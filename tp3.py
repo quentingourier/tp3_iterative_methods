@@ -156,7 +156,7 @@ verif_conv(A)
 b = np.asarray(b).reshape(-1)#remettre b sous forme de vecteur
 x0 = np.zeros(b.shape)
 Nitermax = 100
-liste_epsilon = [10**-4, 10**-5, 10**-6, 10**-7, 10**-8, 10**-9, 10**-10, 10**-11, 10**-12, 10**-13, 10**-14, 10**-15, 10**-16]
+liste_epsilon = [10**-4, 10**-5, 10**-6, 10**-7, 10**-8, 10**-9, 10**-10, 10**-11, 10**-12, 10**-13, 10**-14]
 liste_nb_iteration_J = []
 liste_nb_iteration_GS = []
 for i in range(len (liste_epsilon)):
@@ -169,7 +169,7 @@ print(liste_nb_iteration_GS)
 pp.gca().invert_xaxis()
 pp.plot(liste_epsilon, liste_nb_iteration_J, label = 'Méthode Jacobi')
 pp.plot(liste_epsilon,liste_nb_iteration_GS, label ='Méthode de Gauss-Seidel')
-pp.xlim(10**-16 ,10**-4)
+pp.xlim(10**-14 ,10**-4)
 pp.xscale('log')
 pp.xlabel('précision souhaitée')
 pp.ylabel("nombre d'itérations nécessaires")
@@ -190,7 +190,7 @@ for i in range (0,100):
             A[i,j] = 1/(1+3*abs((i+1)-(j+1)))
 verif_conv(A)
 x0 = np.zeros((100,1))
-liste_epsilon = [10**-4, 10**-5, 10**-6, 10**-7, 10**-8, 10**-9, 10**-10, 10**-11, 10**-12, 10**-13, 10**-14, 10**-15, 10**-16]
+liste_epsilon = [10**-4, 10**-5, 10**-6, 10**-7, 10**-8, 10**-9, 10**-10, 10**-11, 10**-12, 10**-13, 10**-14]
 Nitermax = 100
 liste_nb_iteration_J = []
 liste_nb_iteration_GS = []
@@ -201,7 +201,7 @@ for i in range (0, len (liste_epsilon)):
     liste_nb_iteration_GS.append(nbiter)
 pp.plot(liste_epsilon,liste_nb_iteration_J,label = 'Méthode Jacobi')
 pp.plot(liste_epsilon,liste_nb_iteration_GS,label ='Méthode de Gauss-Seidel')
-pp.xlim(10**-16, 10**-4)
+pp.xlim(10**-14, 10**-4)
 pp.xscale('log')
 pp.xlabel('précision souhaitée')
 pp.ylabel("nombre d'itérations nécessaires")
@@ -269,7 +269,7 @@ for i in range(len (liste_w)):
 courbe_iter_w(liste_w, liste_nbiter)
 courbe_temps_w(liste_w, liste_tps)
 w_etude(A)
-'''
+
 
 #ETUDE W OPTIMAL
 A = np.array([[2, 1, 0], [1, 2, 1], [0, 1, 2]])
