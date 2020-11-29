@@ -1,5 +1,4 @@
-from math import *
-from random import *
+from math import cos
 import numpy as np
 import matplotlib.pyplot as pp
 import time
@@ -61,49 +60,31 @@ def MIRelaxation (A , b , w , x0 , epsilon , Nitermax):
     return MIGenerale(M, N, b, x0, epsilon, Nitermax)
 
 def converge(M, N):
-    B = np.linalg.inv(M) @ N #matrice d'itérat
+    B = np.dot(np.linalg.inv(M), N) #matrice d'itérat
+    print(B)
     vp = np.linalg.eigvals(B)
-    ray_spec = max(np.absolute(vp)) #faire attention à ça pour les complexes 
+    ray_spec = np.abs(vp).max()
+    print(ray_spec)
     return ray_spec
 
-def verif_conv(A):
-    #initialisation
-    '''A = genererA(3)'''
-    print("\nA=\n", A)
-    #par jacobi
-    M = np.diag(np.diag(A))
-    N = M - A
-    ray_spec = converge(M, N)
-    print("\np(J) = ", ray_spec)
-    #par gauss-seidel
-    M = np.tril(A)
-    N = M - A
-    ray_spec = converge(M, N)
-    print("\np(G) = ", ray_spec)
-
+def verif_conv(A, w):
+    #par relaxation
+    D = np.diag(np.diag(A))
+    E = D - np.tril(A)
+    F = D - E - A
+    B = np.dot(np.linalg.inv(D-w*E), ((1-w)*D+w*F))
+    vp = np.linalg.eigvals(B)
+    ray_spec = max(np.absolute(vp)) 
+    #print(ray_spec)
+    return ray_spec
     
-def w_etude(n):
-    A = np.array([[1, 2, -2], [1, 1, 1], [2, 2, 1]])
-    b = np.random.random_sample((n, 1))
-    b = np.asarray(b).reshape(-1)#remettre b sous forme de vecteur
-    print(b.shape)
-    w = np.linspace(1, 2, 10)
-    x0 = np.zeros(b.shape)
-    epsilon = 10**-5
-    Nitermax = 100
-    liste_compteur = []
+def w_etude(A):
+    w = np.linspace(0.1, 1.9, 1000)
+    liste_vconv = []
     for i in range(len(w)):
-        x_new , compteur , erreur = MIRelaxation (A , b , w[i] , x0 , epsilon , Nitermax)
-        liste_compteur.append(compteur)
-    print(liste_compteur)
-    print(w)
-    pp.plot(w, liste_compteur, label = "nombre d'itération pour w donné", color = 'g')
-    pp.xlim(1, 2)
-    pp.xlabel('w')
-    pp.ylabel("nb d'iteration(s)")
-    pp.title("Nombre d'itération(s) nécessaires en fonction du paramètre w")
-    pp.legend()
-    pp.show()
+        liste_vconv.append(verif_conv(A, w[i]))
+    courbe_conv_x(w, liste_vconv)
+    
 
 def courbe_iter_w(liste_w, liste_nbiter):
     pp.plot(liste_w, liste_nbiter, label = 'par MI_Relaxation')
@@ -123,11 +104,19 @@ def courbe_temps_w(liste_w, liste_tps):
     pp.legend()
     pp.show()
     
-    
+def courbe_conv_x(liste_w, liste_vconv):
+    pp.plot(liste_w, liste_vconv, label = "rayon de convergence pour w", color = 'g')
+    pp.xlim(0.7, 1.9)
+    pp.xlabel('w')
+    pp.ylabel("rayon de convergence")
+    pp.title("rayon de convergence en fonction du paramètre w")
+    pp.legend()
+    pp.show()
+
 #----------------------------------------------------------------------------
 #-----------PROGRAMME---------------------------------------------------
 #----------------------------------------------------------------------------
-    
+  
 
 #question 1
 #voir la def
@@ -167,7 +156,7 @@ verif_conv(A)
 b = np.asarray(b).reshape(-1)#remettre b sous forme de vecteur
 x0 = np.zeros(b.shape)
 Nitermax = 100
-liste_epsilon = [10**-1, 10**-2, 10**-3, 10**-4, 10**-5, 10**-6, 10**-7, 10**-8, 10**-9, 10**-10, 10**-11, 10**-12, 10**-13]
+liste_epsilon = [10**-4, 10**-5, 10**-6, 10**-7, 10**-8, 10**-9, 10**-10, 10**-11, 10**-12, 10**-13, 10**-14, 10**-15, 10**-16]
 liste_nb_iteration_J = []
 liste_nb_iteration_GS = []
 
@@ -182,7 +171,7 @@ print(liste_nb_iteration_GS)
 pp.gca().invert_xaxis()
 pp.plot(liste_epsilon, liste_nb_iteration_J, label = 'Méthode Jacobi')
 pp.plot(liste_epsilon,liste_nb_iteration_GS, label ='Méthode de Gauss-Seidel')
-pp.xlim(10**-13 ,0.1)
+pp.xlim(10**-16 ,10**-4)
 pp.xscale('log')
 pp.xlabel('précision souhaitée')
 pp.ylabel("nombre d'itérations nécessaires")
@@ -190,7 +179,7 @@ pp.title("Nombre d'itération nécessaires pour plusieurs précisions souhaitée
 pp.legend()
 pp.show()
 
-'''
+
 # question 2 
 A = np.zeros((100,100))
 b = np.zeros((100,1))
@@ -203,7 +192,7 @@ for i in range (0,100):
             A[i,j] = 1/(1+3*abs((i+1)-(j+1)))
 verif_conv(A)
 x0 = np.zeros((100,1))
-liste_epsilon = [10**-1, 10**-2, 10**-3, 10**-4, 10**-5, 10**-6, 10**-7, 10**-8, 10**-9, 10**-10, 10**-11, 10**-12, 10**-13]
+liste_epsilon = [10**-4, 10**-5, 10**-6, 10**-7, 10**-8, 10**-9, 10**-10, 10**-11, 10**-12, 10**-13, 10**-14, 10**-15, 10**-16]
 Nitermax = 100
 liste_nb_iteration_J = []
 liste_nb_iteration_GS = []
@@ -214,7 +203,7 @@ for i in range (0, len (liste_epsilon)):
     liste_nb_iteration_GS.append(nbiter)
 pp.plot(liste_epsilon,liste_nb_iteration_J,label = 'Méthode Jacobi')
 pp.plot(liste_epsilon,liste_nb_iteration_GS,label ='Méthode de Gauss-Seidel')
-pp.xlim(10**-13 ,0.1)
+pp.xlim(10**-16, 10**-4)
 pp.xscale('log')
 pp.xlabel('précision souhaitée')
 pp.ylabel("nombre d'itérations nécessaires")
@@ -222,9 +211,10 @@ pp.title("Nombre d'itération nécessaires pour plusieurs précisions souhaitée
 pp.legend()
 pp.show()
 
-'''
+
 #question 3
 n= 100
+#----SYSTEME 1-------------------------------------------------
 A = np.zeros((n,n)) #SYSTEME 1
 b = np.zeros((n, 1))
 for i in range (0,n):
@@ -234,11 +224,12 @@ for i in range (0,n):
             b[i,0] = cos((i+1)/8)
         else:
             A[i,j] = 1/(12+(3*(i+1)-5*(j+1))**2)   
-b = np.asarray(b).reshape(-1)#remettre b sous forme de vecteur
 
+b = np.asarray(b).reshape(-1)#remettre b sous forme de vecteur
 x0 = np.zeros(b.shape)
 epsilon = 10**-5
-Nitermax = 1000
+Nitermax = 100
+
 liste_w = np.linspace(0.1, 1.9, 19)
 liste_nbiter = []
 liste_tps = []
@@ -250,9 +241,41 @@ for i in range(len (liste_w)):
     liste_nbiter.append(nbiter)
 courbe_iter_w(liste_w, liste_nbiter)
 courbe_temps_w(liste_w, liste_tps)
+w_etude(A)
+
+#----SYSTEME 2-------------------------------------------------
+A = np.zeros((n,n)) #SYSTEME 2
+b = np.zeros((n, 1))
+for i in range (0,n):
+    for j in range (0,n):
+        if i == j :
+            A[i,i] = 3
+            b[i,0] = cos((i+1)/8)
+        else:
+            A[i,j] = 1/(1+3*abs((i+1)-(j+1)))  
+
+b = np.asarray(b).reshape(-1)#remettre b sous forme de vecteur
+x0 = np.zeros(b.shape)
+epsilon = 10**-5
+Nitermax = 100
+
+liste_w = np.linspace(0.1, 1.9, 19)
+liste_nbiter = []
+liste_tps = []
+for i in range(len (liste_w)):
+    t0 = time.time()
+    x, nbiter, err = MIRelaxation (A , b , liste_w[i] , x0 , epsilon , Nitermax)
+    t1 = time.time()
+    liste_tps.append(t1-t0)
+    liste_nbiter.append(nbiter)
+courbe_iter_w(liste_w, liste_nbiter)
+courbe_temps_w(liste_w, liste_tps)
+w_etude(A)
 '''
 
-
+#ETUDE W OPTIMAL
+A = np.array([[2, 1, 0], [1, 2, 1], [0, 1, 2]])
+w_etude(A)
 
 
 
