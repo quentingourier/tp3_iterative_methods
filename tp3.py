@@ -1,3 +1,10 @@
+#code par Abdelli Nicolas et Gourier Quentin
+#AERO 3B & 3E
+
+#----------------------------------------------------------------------------
+#-----------IMPORTATIONS---------------------------------------------------
+#----------------------------------------------------------------------------
+
 from math import cos
 import numpy as np
 import matplotlib.pyplot as pp
@@ -146,7 +153,7 @@ def res(Aaug):
 #-----------PROGRAMME---------------------------------------------------
 #----------------------------------------------------------------------------
   
-'''
+
 #question 1
 #voir la def
 
@@ -239,10 +246,10 @@ pp.title("Nombre d'itération nécessaires pour plusieurs précisions souhaitée
 pp.legend()
 pp.show()
 
-'''
+
 #question 3
 
-'''
+
 #----SYSTEME 1-------------------------------------------------
 A = np.zeros((n,n)) #SYSTEME 1
 b = np.zeros((n, 1))
@@ -305,7 +312,7 @@ w_etude(A)
 #ETUDE W OPTIMAL
 A = np.array([[2, 1, 0], [1, 2, 1], [0, 1, 2]])
 w_etude(A)
-'''
+
 
 #comparaison méthode iteratives / directes
 taille = [100]
@@ -337,17 +344,7 @@ print("tailles étudiées : ", taille)
 print("nombre d'itérations Jacobi ", liste_nb_iteration_J)
 print("nombre d'itérations Gauss-Seidel ", liste_nb_iteration_GS)
 print("nombre d'itérations Gauss ", liste_nb_iteration_Gauss)
- 
-'''
-liste_nb_iteration_Gauss.append(nbiter)
-pp.plot(taille,liste_nb_iteration_J,label = 'Méthode Jacobi')
-pp.plot(taille,liste_nb_iteration_GS,label ='Méthode de Gauss-Seidel')
-pp.plot(taille,liste_nb_iteration_Gauss,label ='Méthode de Gauss')
-pp.xlim(0, 1000)
-pp.xlabel('taille')
-pp.ylabel("nombre d'itérations nécessaires")
-pp.title("Nombre d'itération nécessaires pour plusieurs précisions souhaitées")
-pp.legend()
-pp.show()
-'''
 
+#
+#FIN DU PROGRAMME
+#
